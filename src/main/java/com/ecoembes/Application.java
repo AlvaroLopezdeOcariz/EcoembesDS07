@@ -33,4 +33,6 @@ public class Application {
 	* com.ecoembes.p1.dto
 
 	* com.ecoembes.p1.exception
+	* 
+	* * com.ecoembes.p1.exception
 */
