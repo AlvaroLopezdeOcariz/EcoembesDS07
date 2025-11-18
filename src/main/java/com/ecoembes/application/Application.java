@@ -6,14 +6,14 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {
-        "com.ecoembes.application",   // paquete del Application
-        "com.ecoembes.p1.controller", // tus controladores
-        "com.AppServices",            // tu AppServices
-        "com.dto",                    // tus DTOs
-        "com.entity",                 // entidades
-        "com.facade",                 // fachada
-        "com.ServerState",            // estado del servidor
-        "com"                         // escanea TODO lo que empiece por com.
+        "com.ecoembes.application",   
+        "com.ecoembes.p1.controller", 
+        "com.AppServices",           
+        "com.dto",                   
+        "com.entity",                 
+        "com.facade",                 
+        "com.ServerState",            
+        "com"                         
 })
 public class Application {
 

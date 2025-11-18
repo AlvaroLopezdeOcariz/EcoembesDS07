@@ -4,7 +4,7 @@ public class CrearContenedorDTO {
 
     private String id;
     private String ubicacion;
-    private String codigoPostal; 
+    private String codigoPostal;
     private Integer capacidad;
 
     public CrearContenedorDTO() {}
@@ -18,6 +18,6 @@ public class CrearContenedorDTO {
     public String getCodigoPostal() { return codigoPostal; }
     public void setCodigoPostal(String codigoPostal) { this.codigoPostal = codigoPostal; }
 
-    public int getCapacidad() { return capacidad; }
-    public void setCapacidad(Integer capacidad) { this.capacidad = capacidad; }
+    public Integer getCapacidad() { return capacidad; }   
+    public void setCapacidad(Integer capacidad) { this.capacidad = capacidad; } 
 }
