@@ -1,4 +1,4 @@
-package com.ecoembes.p1.dto;
+package com.dto;
 
 import java.util.Date;
 import java.util.List;

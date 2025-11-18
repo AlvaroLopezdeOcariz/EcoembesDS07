@@ -1,12 +1,13 @@
-package com.ecoembes.p1.domain;
+package com.entity;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public class AsignacionPlanta {
 
     private String id;
-    private LocalDate fecha;
+    private Date fecha;
     private PlantaReciclaje planta;
     private List<Contenedor> contenedores;
     private int totalEnvases;
@@ -14,7 +15,7 @@ public class AsignacionPlanta {
 
     public AsignacionPlanta() {}
 
-    public AsignacionPlanta(String id, LocalDate fecha, PlantaReciclaje planta,
+    public AsignacionPlanta(String id, Date fecha, PlantaReciclaje planta,
                             List<Contenedor> contenedores, Empleado usuarioAsignador) {
         this.id = id;
         this.fecha = fecha;
@@ -25,7 +26,7 @@ public class AsignacionPlanta {
 
     // getters/setters
     public String getId() { return id; }
-    public LocalDate getFecha() { return fecha; }
+    public Date getFecha() { return fecha; }
     public PlantaReciclaje getPlanta() { return planta; }
     public List<Contenedor> getContenedores() { return contenedores; }
     public int getTotalEnvases() { return totalEnvases; }

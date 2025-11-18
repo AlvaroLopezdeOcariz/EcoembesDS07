@@ -1,16 +1,16 @@
-package com.entity;
+package com.dto;
 
 import java.util.Date;
 
-public class RegistroUsoContenedor {
+public class RegistroUsoDTO {
 
     private String id;
     private Date fecha;
     private String nivelLlenado;
 
-    public RegistroUsoContenedor() {}
+    public RegistroUsoDTO() {}
 
-    public RegistroUsoContenedor(String id, Date fecha, String nivelLlenado) {
+    public RegistroUsoDTO(String id, Date fecha, String nivelLlenado) {
         this.id = id;
         this.fecha = fecha;
         this.nivelLlenado = nivelLlenado;
