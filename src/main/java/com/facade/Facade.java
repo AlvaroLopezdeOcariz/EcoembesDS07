@@ -65,7 +65,7 @@ public class Facade {
     }
 
    
-    public CapacidadPlantaDTO consultarCapacidadPlantaDia(int idPlanta,
+    public CapacidadPlantaDTO consultarCapacidadPlantaDia(Integer idPlanta,
                                                           Date fecha,
                                                           String token) {
         validar(token);

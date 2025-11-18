@@ -1,6 +1,5 @@
 package com.entity;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +9,7 @@ public class AsignacionPlanta {
     private Date fecha;
     private PlantaReciclaje planta;
     private List<Contenedor> contenedores;
-    private int totalEnvases;
+    private Integer totalEnvases;
     private Empleado usuarioAsignador;
 
     public AsignacionPlanta() {}
@@ -29,8 +28,8 @@ public class AsignacionPlanta {
     public Date getFecha() { return fecha; }
     public PlantaReciclaje getPlanta() { return planta; }
     public List<Contenedor> getContenedores() { return contenedores; }
-    public int getTotalEnvases() { return totalEnvases; }
+    public Integer getTotalEnvases() { return totalEnvases; }
     public Empleado getUsuarioAsignador() { return usuarioAsignador; }
 
-    public void setTotalEnvases(int totalEnvases) { this.totalEnvases = totalEnvases; }
+    public void setTotalEnvases(Integer totalEnvases) { this.totalEnvases = totalEnvases; }
 }

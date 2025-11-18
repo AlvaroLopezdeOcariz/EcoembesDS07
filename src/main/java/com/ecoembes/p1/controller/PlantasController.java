@@ -22,7 +22,7 @@ public class PlantasController {
     }
 
     @GetMapping("/capacidad")
-    public CapacidadPlantaDTO capacidad(@RequestParam int idPlanta,
+    public CapacidadPlantaDTO capacidad(@RequestParam Integer idPlanta,
                                         @RequestParam Date fecha,
                                         @RequestHeader("Authorization") String token) {
         return facade.consultarCapacidadPlantaDia(idPlanta, fecha, token);

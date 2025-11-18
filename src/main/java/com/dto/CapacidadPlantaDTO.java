@@ -6,10 +6,10 @@ public class CapacidadPlantaDTO {
 
     private String nombrePlanta;
     private Date fecha;
-    private int capacidadDisponible;
+    private Integer capacidadDisponible;
 
     public CapacidadPlantaDTO() {}
-    public CapacidadPlantaDTO(String nombrePlanta, Date fecha, int capacidadDisponible) {
+    public CapacidadPlantaDTO(String nombrePlanta, Date fecha, Integer capacidadDisponible) {
 		this.nombrePlanta = nombrePlanta;
 		this.fecha = fecha;
 		this.capacidadDisponible = capacidadDisponible;

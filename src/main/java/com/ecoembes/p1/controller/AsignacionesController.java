@@ -1,6 +1,7 @@
 package com.ecoembes.p1.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,7 +10,7 @@ import com.dto.AsignacionPlantaDTO;
 import com.dto.AsignacionResultadoDTO;
 import com.facade.Facade;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+
 
 @RestController
 @RequestMapping("/asignaciones")

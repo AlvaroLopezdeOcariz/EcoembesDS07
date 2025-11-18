@@ -8,7 +8,7 @@ public class ContenedorHistorialDTO {
     private String idContenedor;
     private String ubicacion;
     private String codigPostal;
-    private int capacidadMaxima;
+    private Integer capacidadMaxima;
     private Date fechaInicio;
     private Date fechaFin;
 
@@ -20,7 +20,7 @@ public class ContenedorHistorialDTO {
     public ContenedorHistorialDTO(String idContenedor,
                                   String ubicacion,
                                   String codigPostal,
-                                  int capacidadMaxima,
+                                  Integer capacidadMaxima,
                                   Date fechaInicio,
                                   Date fechaFin,
                                   List<RegistroUsoDTO> historial) {
@@ -37,7 +37,7 @@ public class ContenedorHistorialDTO {
     public String getIdContenedor() { return idContenedor; }
     public String getUbicacion() { return ubicacion; }
     public String getCodigPostal() { return codigPostal; }
-    public int getCapacidadMaxima() { return capacidadMaxima; }
+    public Integer getCapacidadMaxima() { return capacidadMaxima; }
     public Date getFechaInicio() { return fechaInicio; }
     public Date getFechaFin() { return fechaFin; }
     public List<RegistroUsoDTO> getHistorial() { return historial; }

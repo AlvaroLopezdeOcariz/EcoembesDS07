@@ -7,8 +7,8 @@ public class AsignacionResultadoDTO {
     private String id;
     private String nombrePlanta;
     private Date fecha;
-    private int numContenedores;
-    private int numEnvases;
+    private Integer numContenedores;
+    private Integer numEnvases;
 
     public AsignacionResultadoDTO() {}
     public AsignacionResultadoDTO(String id, String nombrePlanta, Date fecha, int numContenedores, int numEnvases) {

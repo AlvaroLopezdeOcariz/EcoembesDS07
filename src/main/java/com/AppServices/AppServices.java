@@ -24,8 +24,15 @@ public class AppServices {
     private final Map<Integer, PlantaReciclaje> plantas = new HashMap<>();
     private final List<AsignacionPlanta> asignaciones = new ArrayList<>();
 
-    public AppServices() {
-        
+
+	public AppServices() {
+    	Contenedor c1 = new Contenedor("0001", "vitoria", 111, 1111);
+        contenedores.put("0001", c1);
+        contenedores.put("0002", new Contenedor("0002", "bilbao", 120, 2222));
+        contenedores.put("0003", new Contenedor("0003", "vitoria", 5, 1122));
+    
+        plantas.put(1, new PlantaReciclaje(1, "Planta1", "donosti", 10000, 30303));
+        plantas.put(1, new PlantaReciclaje(1, "Planta1", "donosti", 10000, 30303));
         empleados.put("admin@ecoembes.com", new Empleado("1", "Admin", "admin@ecoembes.com", "1234"));
     }
 
@@ -43,16 +50,22 @@ public class AppServices {
 
     
     public Contenedor crearContenedor(CrearContenedorDTO dto) {
+        if (dto.getCodigoPostal() == null || dto.getCodigoPostal().isEmpty()) {
+            throw new IllegalArgumentException("codigoPostal no puede ser null o vacío");
+        }
+        int cp = Integer.parseInt(dto.getCodigoPostal());
+
         Contenedor c = new Contenedor(
             dto.getId(),
             dto.getUbicacion(),
             dto.getCapacidad(),
-            Integer.parseInt(dto.getCodigPostal())
+            cp
         );
 
         contenedores.put(c.getId(), c);
         return c;
     }
+
 
     public ContenedorHistorialDTO consultarContenedor(String id, Date inicio, Date fin) {
         Contenedor c = contenedores.get(id);
