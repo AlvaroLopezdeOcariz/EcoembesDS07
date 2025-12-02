@@ -1,103 +1,120 @@
 package com.facade;
 
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
-import com.AppServices.AppServices;
-import com.ServerState.ServerState;
-import com.dto.AsignacionPlantaDTO;
-import com.dto.AsignacionResultadoDTO;
-import com.dto.CapacidadPlantaDTO;
-import com.dto.ContenedorHistorialDTO;
-import com.dto.CrearContenedorDTO;
-import com.dto.LoginDTO;
-import com.entity.AsignacionPlanta;
+import com.AppServices.AsignacionService;
+import com.AppServices.AuthService;
+import com.AppServices.ContenedorService;
+import com.AppServices.PlantaService;
+import com.dto.*;
 import com.entity.Contenedor;
 import com.entity.Empleado;
-
-import java.util.*;
 
 
 @Service
 public class Facade {
 
-    private final AppServices app;
-    private final ServerState state;
+    private final AuthService authService;
+    private final ContenedorService contenedorService;
+    private final PlantaService plantaService;
+    private final AsignacionService asignacionService;
 
-    public Facade(AppServices app, ServerState state) {
-        this.app = app;
-        this.state = state;
+    public Facade(AuthService authService,
+                  ContenedorService contenedorService,
+                  PlantaService plantaService,
+                  AsignacionService asignacionService) {
+
+        this.authService = authService;
+        this.contenedorService = contenedorService;
+        this.plantaService = plantaService;
+        this.asignacionService = asignacionService;
     }
 
-    
-    public LoginDTO login(String email, String pass) {
-        Empleado emp = app.login(email, pass);
+    // =========================
+    // AUTH
+    // =========================
+
+    public LoginDTO login(String email, String password) {
+
+        Empleado emp = authService.login(email, password);
         if (emp == null) return null;
 
+        // token simulado
         String token = UUID.randomUUID().toString();
-        state.anadirSesion(token, emp);
+
 
         return new LoginDTO(token, emp.getId(), emp.getEmail());
     }
 
     public void logout(String token) {
-        state.borrarSesion(token);
+        authService.logout(token);
     }
 
-    
-    public Contenedor crearContenedor(CrearContenedorDTO dto, String token) {
-        validar(token);
+    // =========================
+    // CONTENEDORES
+    // =========================
 
-        return app.crearContenedor(dto);
+    public Contenedor crearContenedor(CrearContenedorDTO dto, String token) {
+        validarToken(token);
+        return contenedorService.crearContenedor(dto);
     }
 
     public ContenedorHistorialDTO consultarContenedor(String id,
-                                                      Date ini,
+                                                      Date inicio,
                                                       Date fin,
                                                       String token) {
-        validar(token);
-
-        return app.consultarContenedor(id, ini, fin);
+        validarToken(token);
+        return contenedorService.consultarContenedor(id, inicio, fin);
     }
 
-    
-    public void actualizarSensor(String idContenedor, String nivel) {
-        app.actualizarSensor(idContenedor, nivel);
-    }
+    // =========================
+    // PLANTAS
+    // =========================
 
-   
     public CapacidadPlantaDTO consultarCapacidadPlantaDia(Integer idPlanta,
-                                                          Date fecha,
-                                                          String token) {
-        validar(token);
-        return app.consultarCapacidad(idPlanta, fecha);
+                                                           Date fecha,
+                                                           String token) {
+        validarToken(token);
+        return plantaService.consultarCapacidad(idPlanta, fecha);
     }
 
-    
-    public AsignacionResultadoDTO asignarContenedoresAPlanta(
-            AsignacionPlantaDTO dto,
-            String token) {
+    // =========================
+    // ASIGNACIONES
+    // =========================
 
-        Empleado emp = validar(token);
+    public AsignacionResultadoDTO asignarContenedoresAPlanta(AsignacionPlantaDTO dto,
+                                                             String token) {
 
-        AsignacionPlanta asign = app.asignarContenedoresAPlanta(
+        validarToken(token);
+
+        Empleado usuario = obtenerUsuarioDesdeToken(token);
+
+        return asignacionService.asignarContenedoresAPlanta(
                 dto.getNombre(),
                 dto.getListaContenedores(),
-                emp);
-
-        return new AsignacionResultadoDTO(
-                asign.getId(),
-                asign.getPlanta().getNombre(),
-                asign.getFecha(),
-                asign.getContenedores().size(),
-                asign.getTotalEnvases()
+                usuario
         );
     }
 
-   
-    private Empleado validar(String token) {
-        if (!state.tokenValido(token)) {
-            throw new RuntimeException("Token inválido");
+    // =========================
+    // MÉTODOS AUXILIARES
+    // =========================
+
+    private void validarToken(String token) {
+    	  System.out.println("TOKEN RECIBIDO: [" + token + "]");
+        if (token == null || token.trim().isEmpty()) {
+            throw new IllegalArgumentException("Token inválido");
         }
-        return state.getEmpleado(token);
+    }
+
+    private Empleado obtenerUsuarioDesdeToken(String token) {
+
+        return new Empleado("1", "Admin", "admin@ecoembes.com", "1234");
     }
 }
+
+

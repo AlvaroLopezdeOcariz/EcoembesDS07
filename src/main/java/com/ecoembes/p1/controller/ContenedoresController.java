@@ -22,7 +22,7 @@ public class ContenedoresController {
 
     @PostMapping
     public Contenedor crear(@RequestBody CrearContenedorDTO dto,
-                            @RequestHeader("Authorization") String token) {
+    		@RequestHeader(value = "Authorization", required = false) String token) {
         return facade.crearContenedor(dto, token);
     }
 
