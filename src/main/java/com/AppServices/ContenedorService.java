@@ -12,7 +12,7 @@ import com.entity.RegistroUsoContenedor;
 @Service
 public class ContenedorService {
 
-    private final Map<String, Contenedor> contenedores = new HashMap<>();
+    private final static Map<String, Contenedor> contenedores = new HashMap<>();
 
     public ContenedorService() {
         contenedores.put("0001", new Contenedor("0001", "vitoria", 111, 1111));
@@ -39,7 +39,7 @@ public class ContenedorService {
         return c;
     }
 
-    public ContenedorHistorialDTO consultarContenedor(String id, Date inicio, Date fin) {
+    public static ContenedorHistorialDTO consultarContenedor(String id, Date inicio, Date fin) {
 
         Contenedor c = contenedores.get(id);
         if (c == null) return null;
@@ -63,7 +63,7 @@ public class ContenedorService {
         }
     }
 
-    private List<RegistroUsoDTO> convertirHistorial(List<RegistroUsoContenedor> lista) {
+    private static List<RegistroUsoDTO> convertirHistorial(List<RegistroUsoContenedor> lista) {
 
         List<RegistroUsoDTO> out = new ArrayList<>();
         for (RegistroUsoContenedor r : lista) {

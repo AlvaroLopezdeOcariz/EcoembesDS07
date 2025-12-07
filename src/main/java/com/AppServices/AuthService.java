@@ -26,4 +26,13 @@ public class AuthService {
     public void logout(String token) {
         // De momento vacío (simulado)
     }
+    
+    public boolean esTokenValido(String token) {
+        return token != null && !token.trim().isEmpty();
+    }
+
+    public Empleado obtenerUsuarioDesdeToken(String token) {
+		// Simulación: siempre devuelve el mismo usuario
+		return empleados.get(token);
+		}
 }
