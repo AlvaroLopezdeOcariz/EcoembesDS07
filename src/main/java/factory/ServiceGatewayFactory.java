@@ -1,19 +1,21 @@
-package external;
+package factory;
 
+import external.ServiceGateway;
 import proxies.ContSocketServiceGateway;
 import proxies.PlasSBServiceGateway;
 
 public class ServiceGatewayFactory {
 
-    public static ServiceGateway create(String type) {
+    public static ServiceGateway create(String type, String urlBase, Integer puerto) {
 
         return switch (type) {
             case "PLASSB" ->
-                new PlasSBServiceGateway("http://localhost:8081/api/plassb");
+                new PlasSBServiceGateway(urlBase);
 
-            case "CONTSOCKET" ->
-                new ContSocketServiceGateway("localhost", 9000);
+            case "CONTSOCKET" -> 
                 
+                 new ContSocketServiceGateway(urlBase, puerto);
+            
 		default -> throw new IllegalArgumentException("Unexpected value: " + type);
 
             

@@ -23,7 +23,7 @@ public class AsignacionService {
                                                              List<Contenedor> lista,
                                                              Empleado usuario) {
 
-        PlantaReciclaje planta = plantaService.getPlanta(Integer.parseInt(idPlant));
+        PlantaReciclaje planta = plantaService.getPlanta(idPlant);
         if (planta == null) return null;
 
         AsignacionPlanta asignacion = new AsignacionPlanta(

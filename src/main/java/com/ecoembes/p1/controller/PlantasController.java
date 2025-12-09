@@ -23,7 +23,7 @@ public class PlantasController {
     }
 
     @GetMapping("/capacidad")
-    public CapacidadPlantaDTO capacidad(@RequestParam Integer idPlanta,
+    public CapacidadPlantaDTO capacidad(@RequestParam String idPlanta,
                                         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fecha,
                                         @RequestParam String token) {
 

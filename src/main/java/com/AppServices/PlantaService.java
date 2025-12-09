@@ -6,28 +6,46 @@ import org.springframework.stereotype.Service;
 import com.dto.CapacidadPlantaDTO;
 import com.entity.PlantaReciclaje;
 
+import dao.PlantaRepository;
+import external.ServiceGateway;
+import factory.ServiceGatewayFactory;
+
 @Service
 public class PlantaService {
 
-    private final Map<Integer, PlantaReciclaje> plantas = new HashMap<>();
-
-    public PlantaService() {
-        plantas.put(1, new PlantaReciclaje(1, "Planta1", "donosti", 10000, 30303));
+   
+    private PlantaRepository plantaRepo;
+    
+    public PlantaReciclaje getPlanta(String idPlanta) {
+		return plantaRepo.findById(idPlanta).orElse(null);
+    	
     }
 
-    public CapacidadPlantaDTO consultarCapacidad(int idPlanta, Date fecha) {
+    
+    	
+    	
+      
+    
 
-        PlantaReciclaje p = plantas.get(idPlanta);
-        if (p == null) return null;
+    public CapacidadPlantaDTO consultarCapacidad(String idPlanta, Date fecha) {
 
-        return new CapacidadPlantaDTO(
-                p.getNombre(),
-                fecha,
-                p.ConsultarCapacidad()
-        );
-    }
+    	PlantaReciclaje plantaReciclaje = getPlanta(idPlanta);
+    	
+    	 ServiceGateway gateway =ServiceGatewayFactory.create(plantaReciclaje.getTipoServidor(),plantaReciclaje.getUrlBase(),plantaReciclaje.getPuerto());
 
-    public PlantaReciclaje getPlanta(int idPlanta) {
-        return plantas.get(idPlanta);
-    }
+    	       
+    	        CapacidadPlantaDTO capacidad = gateway.consultarCapacidad(idPlanta);
+
+    	        if (capacidad == null) {
+    	            return null; 
+    	        }
+
+    	      
+    	        capacidad.setFecha(fecha);
+
+    	        return capacidad;
+    	    }
+
+
+
 }
