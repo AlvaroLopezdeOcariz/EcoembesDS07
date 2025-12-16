@@ -1,8 +1,6 @@
-package proxies;
+package external;
 import com.dto.CapacidadPlantaDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import external.ServiceGateway;
 
 import java.io.*;	
 import java.net.Socket;

@@ -1,8 +1,8 @@
 package factory;
 
+import external.ContSocketServiceGateway;
+import external.PlasSBServiceGateway;
 import external.ServiceGateway;
-import proxies.ContSocketServiceGateway;
-import proxies.PlasSBServiceGateway;
 
 public class ServiceGatewayFactory {
 

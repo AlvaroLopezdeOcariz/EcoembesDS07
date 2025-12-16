@@ -7,5 +7,11 @@ import org.springframework.stereotype.Repository;
 import com.entity.PlantaReciclaje;
 
 @Repository
-public interface PlantaRepository extends JpaRepository<PlantaReciclaje, String> {}
+public interface PlantaRepository extends JpaRepository<PlantaReciclaje, String> {
+	
+	
+}
+
+
+
 
