@@ -1,9 +1,11 @@
 package external;
+
 import com.dto.CapacidadPlantaDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.*;	
+import java.io.*;
 import java.net.Socket;
+import java.time.LocalDate;
 import java.util.Map;
 
 public class ContSocketServiceGateway implements ServiceGateway {
@@ -18,7 +20,7 @@ public class ContSocketServiceGateway implements ServiceGateway {
     }
 
     @Override
-    public CapacidadPlantaDTO consultarCapacidad(String plantaId) {
+    public CapacidadPlantaDTO consultarCapacidad(LocalDate fecha) {
 
         try (Socket socket = new Socket(host, port)) {
 
@@ -27,10 +29,11 @@ public class ContSocketServiceGateway implements ServiceGateway {
                     new InputStreamReader(socket.getInputStream())
             );
 
-            // Enviar petición JSON al servidor socket
-            writer.println("{\"action\":\"GET_CAPACITY\",\"plantId\":" + plantaId + "}");
+ 
+            writer.println(
+                "{\"action\":\"GET_CAPACITY\",\"fecha\":\"" + fecha + "\"}"
+            );
 
-            // Leer respuesta JSON
             String responseJson = reader.readLine();
 
             Map<String, Object> data = mapper.readValue(responseJson, Map.class);
@@ -40,18 +43,17 @@ public class ContSocketServiceGateway implements ServiceGateway {
             }
 
             CapacidadPlantaDTO dto = new CapacidadPlantaDTO();
-            dto.setPlantaId(plantaId);
-            dto.setCapacidadDisponible((int) data.get("capacidadLibreKg"));
-           
+            dto.setCapacidadDisponible((Integer) data.get("capacidadLibreKg"));
+            dto.setFecha(fecha);
 
             return dto;
 
         } catch (Exception e) {
-            System.err.println("ERROR en ContSocketServiceGateway.consultarCapacidad(): " + e.getMessage());
+            System.err.println(
+                "ERROR en ContSocketServiceGateway.consultarCapacidad(): " + e.getMessage()
+            );
             return null;
         }
     }
-
-
- 
 }
+

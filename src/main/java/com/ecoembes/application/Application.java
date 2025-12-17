@@ -1,5 +1,16 @@
 package com.ecoembes.application;
 
+
+/* Para acceder a PlasSB mediante Ecoembes: http://localhost:8080/plantas/capacidad?idPlanta=1&fecha=2025-01-16&token=TOKEN_FIJO
+ * Para acceder a Swagger UI: http://localhost:8080/swagger-ui/index.html
+ * Para acceder a H2 Console: http://localhost:8080/h2-console
+ * Para acceder a PlasSB directamente: http://localhost:8081/plassb/capacidad?fecha=2025-01-15
+ * 
+ * Las fechas en los endpoints deben estar en formato AAAA-MM-DD, y se puede usar cualquier fecha válida, 
+ * que esté en la base de datos de PlasSB (2025-01-15, 2025-01-16, 2025-01-17).
+ * */
+
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;

@@ -1,17 +1,14 @@
 package external;
 
+import java.time.LocalDate;
 
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.dto.CapacidadPlantaDTO;
 
 public class PlasSBServiceGateway implements ServiceGateway {
 
-	@Value("${external.plassb.base-url}")
-	private String baseUrl;
+    private final String baseUrl;
     private final RestTemplate restTemplate;
 
     public PlasSBServiceGateway(String baseUrl) {
@@ -19,23 +16,18 @@ public class PlasSBServiceGateway implements ServiceGateway {
         this.restTemplate = new RestTemplate();
     }
 
-
-
     @Override
-    public CapacidadPlantaDTO consultarCapacidad(String fecha) {
+    public CapacidadPlantaDTO consultarCapacidad(LocalDate fecha) {
 
-        // Endpoint correcto de PlasSB
+        // Endpoint de PlasSB
         String url = baseUrl + "/capacidad?fecha={fecha}";
 
         try {
-            ResponseEntity<CapacidadPlantaDTO> response =
-                    restTemplate.getForEntity(
-                            url,
-                            CapacidadPlantaDTO.class,
-                            fecha
-                    );
-
-            return response.getBody();
+            return restTemplate.getForObject(
+                    url,
+                    CapacidadPlantaDTO.class,
+                    fecha.toString() // YYYY-MM-DD
+            );
 
         } catch (Exception e) {
             System.err.println(
@@ -44,6 +36,4 @@ public class PlasSBServiceGateway implements ServiceGateway {
             return null;
         }
     }
-
-    
 }

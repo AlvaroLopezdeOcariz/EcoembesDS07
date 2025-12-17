@@ -1,6 +1,7 @@
 package com.AppServices;
 
-import java.util.*;
+import java.time.LocalDate;
+
 import org.springframework.stereotype.Service;
 
 import com.dto.CapacidadPlantaDTO;
@@ -13,39 +14,38 @@ import factory.ServiceGatewayFactory;
 @Service
 public class PlantaService {
 
-   
-    private PlantaRepository plantaRepo;
-    
-    public PlantaReciclaje getPlanta(String idPlanta) {
-		return plantaRepo.findById(idPlanta).orElse(null);
-    	
+    private final PlantaRepository plantaRepo;
+
+    public PlantaService(PlantaRepository plantaRepo) {
+        this.plantaRepo = plantaRepo;
     }
 
-    
-    	
-    	
-      
-    
+    public PlantaReciclaje getPlanta(String idPlanta) {
+        return plantaRepo.findById(idPlanta)
+                .orElseThrow(() -> new RuntimeException("Planta no encontrada: " + idPlanta));
+    }
 
-    public CapacidadPlantaDTO consultarCapacidad(String idPlanta, Date fecha) {
+    public CapacidadPlantaDTO consultarCapacidad(String idPlanta, String fecha) {
 
-    	PlantaReciclaje plantaReciclaje = getPlanta(idPlanta);
-    	
-    	 ServiceGateway gateway =ServiceGatewayFactory.create(plantaReciclaje.getTipoServidor(),plantaReciclaje.getUrlBase(),plantaReciclaje.getPuerto());
+        LocalDate fechaConsulta = LocalDate.parse(fecha);
 
-    	       
-    	        CapacidadPlantaDTO capacidad = gateway.consultarCapacidad(idPlanta);
+        PlantaReciclaje planta = getPlanta(idPlanta);
 
-    	        if (capacidad == null) {
-    	            return null; 
-    	        }
+        ServiceGateway gateway = ServiceGatewayFactory.create(
+                planta.getTipoServidor(),
+                planta.getUrlBase(),
+                planta.getPuerto()
+        );
 
-    	      
-    	        capacidad.setFecha(fecha);
+        // ✅ LLAMADA CORRECTA
+        CapacidadPlantaDTO capacidad = gateway.consultarCapacidad(fechaConsulta);
 
-    	        return capacidad;
-    	    }
+        if (capacidad == null) {
+            throw new RuntimeException("No se pudo obtener la capacidad de la planta");
+        }
 
+        capacidad.setFecha(fechaConsulta);
 
-
+        return capacidad;
+    }
 }

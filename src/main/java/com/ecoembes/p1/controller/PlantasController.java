@@ -1,8 +1,5 @@
 package com.ecoembes.p1.controller;
 
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import com.AppServices.AuthService;
@@ -23,18 +20,16 @@ public class PlantasController {
     }
 
     @GetMapping("/capacidad")
-    public CapacidadPlantaDTO capacidad(@RequestParam String idPlanta,
-                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fecha,
-                                        @RequestParam String token) {
+    public CapacidadPlantaDTO capacidad(
+            @RequestParam("idPlanta") String idPlanta,
+            @RequestParam("fecha") String fecha,
+            @RequestParam("token") String token) {
 
         validarToken(token);
-
         return plantaService.consultarCapacidad(idPlanta, fecha);
     }
 
-    
     private void validarToken(String token) {
-
         if (token == null || token.isEmpty()) {
             throw new RuntimeException("Token obligatorio");
         }
@@ -44,5 +39,6 @@ public class PlantasController {
         }
     }
 }
+
 
 
