@@ -6,19 +6,31 @@ import external.ServiceGateway;
 
 public class ServiceGatewayFactory {
 
-    public static ServiceGateway create(String type, String urlBase, Integer puerto) {
+    public static ServiceGateway create(
+            String tipoServidor,
+            String urlBase,
+            Integer puerto) {
 
-        return switch (type) {
-            case "PLASSB" ->
-                new PlasSBServiceGateway(urlBase);
+        return switch (tipoServidor) {
 
-            case "CONTSOCKET" -> 
-                
-                 new ContSocketServiceGateway(urlBase, puerto);
-            
-		default -> throw new IllegalArgumentException("Unexpected value: " + type);
+            case "PLASSB" -> {
+                // 🔹 Caso antiguo: url_base YA es completa
+                if (puerto == null) {
+                    yield new PlasSBServiceGateway(urlBase);
+                }
+                // 🔹 Caso nuevo: host + puerto
+                yield new PlasSBServiceGateway(urlBase + ":" + puerto);
+            }
 
-            
+            case "CONTSOCKET" -> {
+                // 🔹 ContSocket SIEMPRE es REST
+                yield new ContSocketServiceGateway(urlBase + ":" + puerto);
+            }
+
+            default -> throw new IllegalArgumentException(
+                    "Tipo de servidor no soportado: " + tipoServidor
+            );
         };
     }
 }
+

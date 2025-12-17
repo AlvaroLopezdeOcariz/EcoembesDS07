@@ -1,39 +1,42 @@
 package external;
 
-import java.time.LocalDate;
-
+import com.dto.CapacidadPlantaDTO;
 import org.springframework.web.client.RestTemplate;
 
-import com.dto.CapacidadPlantaDTO;
+import java.time.LocalDate;
 
 public class PlasSBServiceGateway implements ServiceGateway {
 
     private final String baseUrl;
-    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate = new RestTemplate();
 
+    /**
+     * @param baseUrl URL COMPLETA del servicio PlasSB.
+     *                Ejemplo: http://localhost:8081/plassb
+     */
     public PlasSBServiceGateway(String baseUrl) {
         this.baseUrl = baseUrl;
-        this.restTemplate = new RestTemplate();
     }
 
     @Override
     public CapacidadPlantaDTO consultarCapacidad(LocalDate fecha) {
 
-        // Endpoint de PlasSB
+        // Construcción segura de la URL
         String url = baseUrl + "/capacidad?fecha={fecha}";
 
         try {
             return restTemplate.getForObject(
                     url,
                     CapacidadPlantaDTO.class,
-                    fecha.toString() // YYYY-MM-DD
+                    fecha.toString()
             );
 
         } catch (Exception e) {
-            System.err.println(
-                "ERROR en PlasSBServiceGateway.consultarCapacidad(): " + e.getMessage()
-            );
+            // Log explícito para depuración
+            System.err.println("[PlasSBServiceGateway] Error llamando a " + url);
+            e.printStackTrace();
             return null;
         }
     }
 }
+

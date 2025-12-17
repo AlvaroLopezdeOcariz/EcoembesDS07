@@ -7,4 +7,4 @@ VALUES
 INSERT INTO planta_reciclaje 
 (id, nombre, ubicacion, maxima_capacidad, codigo_postal, tipo_servidor, url_base, puerto)
 VALUES 
-('2', 'Planta Bilbao', 'Bilbao', 8000, 48001, 'CONTSOCKET', 'localhost', 9000);
+('2', 'Planta Bilbao', 'Bilbao', 8000, 48001, 'CONTSOCKET', 'http://localhost', 8083);

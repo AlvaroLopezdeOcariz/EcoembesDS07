@@ -1,59 +1,41 @@
 package external;
 
 import com.dto.CapacidadPlantaDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.client.RestTemplate;
 
-import java.io.*;
-import java.net.Socket;
 import java.time.LocalDate;
 import java.util.Map;
 
 public class ContSocketServiceGateway implements ServiceGateway {
 
-    private final String host;
-    private final int port;
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final String baseUrl;
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    public ContSocketServiceGateway(String host, int port) {
-        this.host = host;
-        this.port = port;
+    public ContSocketServiceGateway(String baseUrl) {
+        this.baseUrl = baseUrl;
     }
 
     @Override
     public CapacidadPlantaDTO consultarCapacidad(LocalDate fecha) {
 
-        try (Socket socket = new Socket(host, port)) {
+        // URL del servicio ContSocket
+        String url = baseUrl + "/contsocket/capacidad?fecha={fecha}";
 
-            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream())
-            );
-
- 
-            writer.println(
-                "{\"action\":\"GET_CAPACITY\",\"fecha\":\"" + fecha + "\"}"
-            );
-
-            String responseJson = reader.readLine();
-
-            Map<String, Object> data = mapper.readValue(responseJson, Map.class);
-
-            if (!"OK".equals(data.get("status"))) {
-                return null;
-            }
+        try {
+            Map<String, Object> response =
+                    restTemplate.getForObject(url, Map.class, fecha.toString());
 
             CapacidadPlantaDTO dto = new CapacidadPlantaDTO();
-            dto.setCapacidadDisponible((Integer) data.get("capacidadLibreKg"));
             dto.setFecha(fecha);
+            dto.setCapacidadDisponible(
+                    ((Number) response.get("capacidadDisponible")).intValue()
+            );
 
             return dto;
 
         } catch (Exception e) {
-            System.err.println(
-                "ERROR en ContSocketServiceGateway.consultarCapacidad(): " + e.getMessage()
-            );
-            return null;
+            throw new RuntimeException(
+                    "Error al consultar capacidad en ContSocket", e);
         }
     }
 }
-
