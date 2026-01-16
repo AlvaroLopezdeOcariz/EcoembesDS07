@@ -1,6 +1,7 @@
 package factory;
 
-import external.ContSocketServiceGateway;
+
+import external.ContSocketSocketGateway;
 import external.PlasSBServiceGateway;
 import external.ServiceGateway;
 
@@ -24,7 +25,7 @@ public class ServiceGatewayFactory {
 
             case "CONTSOCKET" -> {
                 // 🔹 ContSocket SIEMPRE es REST
-                yield new ContSocketServiceGateway(urlBase + ":" + puerto);
+            	yield new ContSocketSocketGateway(urlBase, puerto);
             }
 
             default -> throw new IllegalArgumentException(
