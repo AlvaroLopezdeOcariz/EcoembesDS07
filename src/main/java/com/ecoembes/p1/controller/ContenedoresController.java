@@ -54,16 +54,9 @@ public class ContenedoresController {
     @ApiResponse(responseCode = "404", description = "Contenedor no encontrado")
     @GetMapping("/{id}/status")
     public ResponseEntity<ContenedorHistorialDTO> status(
-            @Parameter(description = "ID del contenedor", example = "C123")
-            @PathVariable String id,
-
-            @Parameter(description = "Fecha de inicio (YYYY-MM-DD)")
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date inicio,
-
-            @Parameter(description = "Fecha de fin (YYYY-MM-DD)")
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fin,
-
-            @Parameter(description = "Token proporcionado por el usuario", required = true)
+            @PathVariable("id") String id,
+            @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date inicio,
+            @RequestParam("fin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fin,
             @RequestParam("token") String token) {
 
         ContenedorHistorialDTO historial = ContenedorService.consultarContenedor(id, inicio, fin);

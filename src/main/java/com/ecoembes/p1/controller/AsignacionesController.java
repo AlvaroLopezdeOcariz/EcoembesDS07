@@ -23,7 +23,7 @@ public class AsignacionesController {
 
     @PostMapping
     public AsignacionResultadoDTO asignar(@RequestBody AsignacionPlantaDTO dto,
-                                          @RequestParam String token) {
+                                          @RequestParam("token") String token) {
 
         validarToken(token);
 
