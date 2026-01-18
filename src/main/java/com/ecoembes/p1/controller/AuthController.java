@@ -1,7 +1,6 @@
 package com.ecoembes.p1.controller;
 
 import org.springframework.web.bind.annotation.*;
-
 import com.AppServices.AuthService;
 import com.dto.LoginDTO;
 import com.entity.Empleado;
@@ -19,17 +18,14 @@ public class AuthController {
     @PostMapping("/login")
     public LoginDTO login(@RequestParam("email") String email,
                           @RequestParam("password") String password) {
-
-        // 🔑 El servicio devuelve el token
+        
+        // 🔑 El servicio ya lanza excepción si las credenciales son incorrectas
+        // No necesitamos verificar null
         String token = authService.login(email, password);
-
-        if (token == null) {
-            throw new RuntimeException("Credenciales incorrectas");
-        }
-
+        
         // Obtener usuario a partir del token
         Empleado emp = authService.obtenerUsuarioDesdeToken(token);
-
+        
         return new LoginDTO(token, emp.getId(), emp.getEmail());
     }
 
@@ -43,13 +39,8 @@ public class AuthController {
         if (token == null || token.isEmpty()) {
             throw new RuntimeException("Token obligatorio");
         }
-
         if (!authService.esTokenValido(token)) {
             throw new RuntimeException("Token inválido");
         }
     }
 }
-
-
-
-

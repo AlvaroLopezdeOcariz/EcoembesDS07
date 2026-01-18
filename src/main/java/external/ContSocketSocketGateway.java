@@ -51,5 +51,39 @@ public class ContSocketSocketGateway implements ServiceGateway {
             throw new RuntimeException("Error comunicando con ContSocket por socket", e);
         }
     }
+    
+    @Override
+    public void notificarAsignacion(int numContenedores, int totalKg, LocalDate fecha) {
+        try (Socket socket = new Socket("localhost", port)) {
+            
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            
+            // Crear mensaje JSON para el socket
+            String mensaje = String.format(
+                "{\"tipo\":\"NOTIFICACION_ASIGNACION\",\"fecha\":\"%s\",\"numContenedores\":%d,\"totalEnvasesKg\":%d}",
+                fecha.toString(),
+                numContenedores,
+                totalKg
+            );
+            
+            // Enviar mensaje
+            out.println(mensaje);
+            out.println(); // Línea vacía para indicar fin del mensaje
+            
+            // Leer respuesta
+            String respuesta = in.readLine();
+            
+            if (respuesta != null && respuesta.contains("OK")) {
+                System.out.println("[ContSocket] Notificación enviada correctamente");
+            } else {
+                System.err.println("[ContSocket] Respuesta inesperada: " + respuesta);
+            }
+            
+        } catch (IOException e) {
+            System.err.println("[ContSocket] Error notificación: " + e.getMessage());
+            throw new RuntimeException("Error al notificar ContSocket", e);
+        }
+    }
 }
 

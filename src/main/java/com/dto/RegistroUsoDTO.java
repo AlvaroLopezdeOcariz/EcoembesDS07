@@ -3,20 +3,41 @@ package com.dto;
 import java.util.Date;
 
 public class RegistroUsoDTO {
-
-    private String id;
+    
     private Date fecha;
-    private String nivelLlenado;
-
+    private Integer nivelLlenado;
+    private Integer numEnvases;
+    
     public RegistroUsoDTO() {}
-
-    public RegistroUsoDTO(String id, Date fecha, String nivelLlenado) {
-        this.id = id;
+    
+    public RegistroUsoDTO(Date fecha, Integer nivelLlenado, Integer numEnvases) {
         this.fecha = fecha;
         this.nivelLlenado = nivelLlenado;
+        this.numEnvases = numEnvases;
     }
-
-    public String getId() { return id; }
-    public Date getFecha() { return fecha; }
-    public String getNivelLlenado() { return nivelLlenado; }
+    
+    // Getters y Setters
+    public Date getFecha() {
+        return fecha;
+    }
+    
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+    
+    public Integer getNivelLlenado() {
+        return nivelLlenado;
+    }
+    
+    public void setNivelLlenado(Integer nivelLlenado) {
+        this.nivelLlenado = nivelLlenado;
+    }
+    
+    public Integer getNumEnvases() {
+        return numEnvases;
+    }
+    
+    public void setNumEnvases(Integer numEnvases) {
+        this.numEnvases = numEnvases;
+    }
 }

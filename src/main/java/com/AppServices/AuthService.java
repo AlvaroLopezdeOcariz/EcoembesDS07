@@ -1,72 +1,82 @@
 package com.AppServices;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import org.springframework.stereotype.Service;
 import com.entity.Empleado;
+import com.ServerState.ServerState;
+import dao.EmpleadoRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class AuthService {
 
-    // Token fijo para pruebas
-    public static final String TOKEN_TEST = "TOKEN_FIJO";
+    private final EmpleadoRepository empleadoRepository;
+    private final ServerState serverState;
 
-    // Usuarios (simulación de BD)
-    private final Map<String, Empleado> empleados = new HashMap<>();
-
-    // Tokens activos → token : empleado
-    private final Map<String, Empleado> tokensActivos = new HashMap<>();
-
-    public AuthService() {
-        Empleado admin = new Empleado("1", "Admin", "admin@ecoembes.com", "1234");
-
-        // Usuario registrado
-        empleados.put(admin.getEmail(), admin);
-
-        // Token fijo de pruebas
-        tokensActivos.put(TOKEN_TEST, admin);
+    // Constructor con inyección de dependencias
+    public AuthService(EmpleadoRepository empleadoRepository, ServerState serverState) {
+        this.empleadoRepository = empleadoRepository;
+        this.serverState = serverState;
     }
 
-    /**
-     * Login: valida credenciales y genera token
-     */
     public String login(String email, String password) {
-        Empleado emp = empleados.get(email);
-
-        if (emp == null) return null;
-        if (!emp.getPassword().equals(password)) return null;
-
-        // Generar token "real"
-        String token = UUID.randomUUID().toString();
-        tokensActivos.put(token, emp);
-
+        
+        System.out.println("======= DEBUG LOGIN =======");
+        System.out.println("Email recibido: '" + email + "'");
+        System.out.println("Password recibido: '" + password + "'");
+        
+        // Buscar empleado por email en la base de datos
+        Optional<Empleado> empleadoOpt = empleadoRepository.findByEmail(email);
+        
+        if (empleadoOpt.isEmpty()) {
+            System.err.println("ERROR: Usuario no encontrado en BD");
+            throw new RuntimeException("Usuario no encontrado");
+        }
+        
+        Empleado empleado = empleadoOpt.get();
+        System.out.println("Usuario encontrado: " + empleado.getEmail());
+        System.out.println("Password en BD: '" + empleado.getPassword() + "'");
+        
+        // Verificar contraseña
+        if (!empleado.getPassword().equals(password)) {
+            System.err.println("ERROR: Password NO coincide");
+            System.err.println("  Esperado: '" + empleado.getPassword() + "'");
+            System.err.println("  Recibido: '" + password + "'");
+            throw new RuntimeException("Credenciales incorrectas");
+        }
+        
+        System.out.println("✓ Password correcto");
+        
+        // Generar token (timestamp)
+        String token = String.valueOf(System.currentTimeMillis());
+        
+        // Guardar token en el estado del servidor
+        serverState.addToken(token, empleado);
+        
+        System.out.println("✓ Token generado: " + token);
+        System.out.println("===========================");
+        
         return token;
     }
 
-    /**
-     * Logout: invalida el token
-     */
     public void logout(String token) {
-        if (!TOKEN_TEST.equals(token)) {
-            tokensActivos.remove(token);
+        if (token != null && !token.isEmpty()) {
+            serverState.removeToken(token);
+            System.out.println("[AuthService] Logout exitoso: " + token);
         }
     }
 
-    /**
-     * Comprueba si el token es válido (test o real)
-     */
     public boolean esTokenValido(String token) {
-        return token != null && tokensActivos.containsKey(token);
+        boolean valido = serverState.existeToken(token);
+        System.out.println("[AuthService] Token " + token + " es válido: " + valido);
+        return valido;
     }
 
-    /**
-     * Devuelve el usuario asociado al token
-     */
     public Empleado obtenerUsuarioDesdeToken(String token) {
-        return tokensActivos.get(token);
+        Empleado emp = serverState.getEmpleadoPorToken(token);
+        if (emp == null) {
+            System.err.println("[AuthService] No se encontró empleado para token: " + token);
+        }
+        return emp;
     }
 }
-
-

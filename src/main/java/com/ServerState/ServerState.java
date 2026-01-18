@@ -1,30 +1,53 @@
 package com.ServerState;
 
+import com.entity.Empleado;
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
-
-import com.entity.Empleado;
-
 @Component
 public class ServerState {
-
-    private final Map<String, Empleado> sesionesActivas = new HashMap<>();
-
-    public void anadirSesion(String token, Empleado empleado) {
-        sesionesActivas.put(token, empleado);
+    
+    // Mapa de tokens activos: token -> empleado
+    private final Map<String, Empleado> tokensActivos = new HashMap<>();
+    
+    /**
+     * Añade un token al estado del servidor
+     */
+    public void addToken(String token, Empleado empleado) {
+        tokensActivos.put(token, empleado);
+        System.out.println("[ServerState] Token añadido: " + token + " para " + empleado.getEmail());
     }
-
-    public void borrarSesion(String token) {
-        sesionesActivas.remove(token);
+    
+    /**
+     * Elimina un token del estado
+     */
+    public void removeToken(String token) {
+        Empleado removed = tokensActivos.remove(token);
+        if (removed != null) {
+            System.out.println("[ServerState] Token eliminado: " + token);
+        }
     }
-
-    public boolean tokenValido(String token) {
-        return sesionesActivas.containsKey(token);
+    
+    /**
+     * Verifica si un token existe
+     */
+    public boolean existeToken(String token) {
+        return tokensActivos.containsKey(token);
     }
-
-    public Empleado getEmpleado(String token) {
-        return sesionesActivas.get(token);
+    
+    /**
+     * Obtiene el empleado asociado a un token
+     */
+    public Empleado getEmpleadoPorToken(String token) {
+        return tokensActivos.get(token);
+    }
+    
+    /**
+     * Obtiene todos los tokens activos (útil para debugging)
+     */
+    public Map<String, Empleado> getTokensActivos() {
+        return new HashMap<>(tokensActivos);
     }
 }
